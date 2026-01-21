@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>From Physical diffusion to Diffusion Models</title>
+    <link>http://localhost:1313/Physics-in-Diffusion_models/</link>
+    <description>Recent content on From Physical diffusion to Diffusion Models</description>
+    <generator>Hugo -- 0.151.0</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 20 Jan 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/Physics-in-Diffusion_models/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Diffusion</title>
+      <link>http://localhost:1313/Physics-in-Diffusion_models/posts/diffusion2/</link>
+      <pubDate>Tue, 20 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/Physics-in-Diffusion_models/posts/diffusion2/</guid>
+      <description>&lt;h1 id=&#34;from-physical-diffusion-to-diffusion-models-building-intuition&#34;&gt;From Physical Diffusion to Diffusion Models: Building Intuition&lt;/h1&gt;
+&lt;p&gt;Coming from a physics background and now working in data science for remote sensing, I was naturally intrigued by diffusion models. While reading about their impressive generative capabilities, I initially struggled to understand how a physical process like diffusion could inspire a modern generative model. How does a phenomenon traditionally associated with randomness, entropy, and information loss become a mechanism for learning complex data distributions?&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

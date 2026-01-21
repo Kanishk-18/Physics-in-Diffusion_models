@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="dark">
+
+<head><script src="/Physics-in-Diffusion_models/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=Physics-in-Diffusion_models/livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Diffusion | From Physical diffusion to Diffusion Models</title>
+<meta name="keywords" content="">
+<meta name="description" content="From Physical Diffusion to Diffusion Models: Building Intuition
+Coming from a physics background and now working in data science for remote sensing, I was naturally intrigued by diffusion models. While reading about their impressive generative capabilities, I initially struggled to understand how a physical process like diffusion could inspire a modern generative model. How does a phenomenon traditionally associated with randomness, entropy, and information loss become a mechanism for learning complex data distributions?">
+<meta name="author" content="">
+<link rel="canonical" href="http://localhost:1313/Physics-in-Diffusion_models/posts/diffusion2/">
+<link crossorigin="anonymous" href="/Physics-in-Diffusion_models/assets/css/stylesheet.da3211e5ef867bf2b75fd5a6515cfed7195c011e8ab735694e203810a827097b.css" integrity="sha256-2jIR5e&#43;Ge/K3X9WmUVz&#43;1xlcAR6KtzVpTiA4EKgnCXs=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/Physics-in-Diffusion_models/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/Physics-in-Diffusion_models/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/Physics-in-Diffusion_models/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/Physics-in-Diffusion_models/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/Physics-in-Diffusion_models/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/Physics-in-Diffusion_models/posts/diffusion2/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "light") {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.27/dist/katex.min.css"
+      integrity="sha384-Pu5+C18nP5dwykLJOhd2U4Xen7rjScHN/qusop27hdd2drI+lL5KvX7YntvT8yew"
+      crossorigin="anonymous">
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.27/dist/katex.min.js"
+        integrity="sha384-2B8pfmZZ6JlVoScJm/5hQfNS2TI/6hPqDZInzzPc8oHpN5SgeNOf4LzREO6p5YtZ"
+        crossorigin="anonymous"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.27/dist/contrib/auto-render.min.js"
+        integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh"
+        crossorigin="anonymous"
+        onload="renderMathInElement(document.body, {
+            delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '$', right: '$', display: false},
+                {left: '\\(', right: '\\)', display: false},
+                {left: '\\[', right: '\\]', display: true}
+            ],
+            throwOnError : false
+        });">
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/Physics-in-Diffusion_models/" accesskey="h" title="From Physical diffusion to Diffusion Models (Alt + H)">From Physical diffusion to Diffusion Models</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Diffusion
+    </h1>
+    <div class="post-meta"><span title='2026-01-20 00:00:00 +0000 UTC'>January 20, 2026</span>&nbsp;·&nbsp;<span>6 min</span>
+
+</div>
+  </header> 
+  <div class="post-content"><h1 id="from-physical-diffusion-to-diffusion-models-building-intuition">From Physical Diffusion to Diffusion Models: Building Intuition<a hidden class="anchor" aria-hidden="true" href="#from-physical-diffusion-to-diffusion-models-building-intuition">#</a></h1>
+<p>Coming from a physics background and now working in data science for remote sensing, I was naturally intrigued by diffusion models. While reading about their impressive generative capabilities, I initially struggled to understand how a physical process like diffusion could inspire a modern generative model. How does a phenomenon traditionally associated with randomness, entropy, and information loss become a mechanism for learning complex data distributions?</p>
+<p>In this blog, I aim to build intuition for diffusion models by tracing their roots back to physical diffusion processes and unpacking how these ideas translate into the forward process of diffusion models. The focus here is on understanding how data is progressively corrupted in a principled way, and how this mirrors classical diffusion in physics.</p>
+<p>I will deliberately postpone a detailed discussion of the reverse (generation) process to the next part. However, I assume a basic familiarity with the overall workflow of diffusion models, so that the connection between physical diffusion and the forward noising process can be properly appreciated. Rather than treating diffusion models as black-box neural networks, the goal here is to understand the principles that make their construction both physically intuitive and mathematically sound.</p>
+<h2 id="diffusion-in-physics-the-intuition">Diffusion in Physics: The Intuition<a hidden class="anchor" aria-hidden="true" href="#diffusion-in-physics-the-intuition">#</a></h2>
+<p>Before diffusion became a generative model, it was a physical process used to describe how order gradually gives way to randomness. Understanding this physical intuition is key to appreciating why diffusion models work so well in machine learning.</p>
+<h2 id="brownian-motion-and-stochasticity">Brownian Motion and Stochasticity<a hidden class="anchor" aria-hidden="true" href="#brownian-motion-and-stochasticity">#</a></h2>
+<p>Diffusion originates from the study of Brownian motion—the seemingly random movement of microscopic particles suspended in a fluid. Although each particle follows a chaotic trajectory due to countless molecular collisions, the process itself is not arbitrary. Instead, it is governed by well-defined statistical laws.</p>
+<p>Mathematically, Brownian motion is modeled as a stochastic process, where the future state depends on the current state and random fluctuations.</p>
+<p>To understand this mathematically, let a particle follow a random walk. At each time step $ \Delta t $:</p>
+<ul>
+<li>the particle moves left or right with equal probability</li>
+<li>the step size is $ \Delta x $</li>
+</ul>
+<p>The probability evolution at time $ \Delta t $ can be written as</p>
+<p>$$
+\begin{equation}
+p(x, t + \Delta t ) = \frac{1}{2}\left[p(x-\Delta x, t) + p(x + \Delta x, t)\right]
+\end{equation}
+$$</p>
+<p>Since this equation is discrete (random walk), we approximate it using Taylor expansions around $x$ and $t$:</p>
+<p>$$
+p(x, t + \Delta t) = p(x,t) + \Delta t \frac{\partial p}{\partial t}
+$$</p>
+<p>$$
+p(x+\Delta x, t) = p(x,t) + \Delta x \frac{\partial p}{\partial x} + \frac{\Delta x^2}{2} \frac{\partial^2 p}{\partial x^2}
+$$</p>
+<p>$$
+p(x-\Delta x, t) = p(x,t) - \Delta x \frac{\partial p}{\partial x} + \frac{\Delta x^2}{2} \frac{\partial^2 p}{\partial x^2}
+$$</p>
+<p>Substituting these approximations into Equation (1) and simplifying, we obtain</p>
+<p>$$
+\frac{\partial p}{\partial t} = \frac{\Delta x^2}{2 \Delta t} \frac{\partial^2 p}{\partial x^2}
+$$</p>
+<p>Defining the diffusion coefficient $D = \frac{\Delta x^2}{2 \Delta t}$, we arrive at the diffusion equation:</p>
+<p>$$
+\begin{equation}
+\frac{\partial p}{\partial t} = D \frac{\partial^2 p}{\partial x^2}
+\end{equation}
+$$</p>
+<p>The diffusion coefficient $D$ controls how quickly uncertainty spreads. In fact, the variance of the particle position grows linearly with time:</p>
+<p>$$
+\text{Var}(x_t) = 2Dt
+$$</p>
+<p>From Equation (2), we see that as time increases, uncertainty in the particle’s position increases, and hence entropy increases. Diffusion is therefore a process of <strong>progressive information loss</strong>.</p>
+<h2 id="why-gaussian-noise-appears-naturally">Why Gaussian Noise Appears Naturally<a hidden class="anchor" aria-hidden="true" href="#why-gaussian-noise-appears-naturally">#</a></h2>
+<p>Now, with this foundation, we can understand one of the key reasons why <strong>Gaussian noise</strong> is used in diffusion models.</p>
+<p>Assume a particle starts at position $x = 0$ at time $t = 0$. The initial distribution is</p>
+<p>$$
+p(x,0) = \delta(x)
+$$</p>
+<p>where $\delta(\cdot)$ is the Dirac delta function, representing complete certainty.</p>
+<p>In diffusion, particle motion arises from the accumulation of an extremely large number of tiny, independent random steps. After time $t$, the position can be written as</p>
+<p>$$
+x_t = \sum_{i=1}^{N} \zeta_i
+$$</p>
+<p>where $\zeta_i$ are independent random variables with finite variance.</p>
+<p>By the Central Limit Theorem, the sum of many independent random variables converges to a Gaussian distribution, regardless of the exact form of each step:</p>
+<p>$$
+x_t \approx \mathcal{N}(0, \sigma^2 t)
+$$</p>
+<p>Solving the diffusion equation with the delta-function initial condition yields the fundamental solution:</p>
+<p>$$
+\begin{equation}
+p(x,t) = \frac{1}{\sqrt{4\pi Dt}} \exp\left( \frac{-x^2}{4Dt} \right)
+\end{equation}
+$$</p>
+<p>Thus, diffusion evolves a system from <strong>absolute certainty</strong> to a <strong>Gaussian distribution</strong>, which is the maximum-entropy distribution under a fixed variance constraint.</p>
+<p>This observation is crucial: <strong>Gaussian noise represents the most unstructured distribution possible when energy (variance) is controlled</strong>. In other words, diffusion systematically removes structure while preserving mathematical tractability.</p>
+<h2 id="motivation-for-gaussian-noise-in-diffusion-models">Motivation for Gaussian Noise in Diffusion Models<a hidden class="anchor" aria-hidden="true" href="#motivation-for-gaussian-noise-in-diffusion-models">#</a></h2>
+<p>Diffusion models adopt this physical intuition as a <strong>modeling choice</strong>. The goal of the forward process is to gradually destroy the structure of real data until it becomes pure noise. Gaussian noise is particularly well-suited for this purpose because:</p>
+<ul>
+<li>it naturally arises from the accumulation of small independent perturbations</li>
+<li>it maximizes entropy for a fixed variance</li>
+<li>it allows closed-form expressions for marginal distributions</li>
+<li>it leads to stable and tractable learning objectives</li>
+</ul>
+<p><strong>Key Note:</strong><br>
+<em>While Gaussian noise is a natural choice from a physical diffusion perspective, its true importance lies in the reverse process. Gaussian corruption ensures that the reverse-time dynamics remain locally Gaussian, enabling tractable variational inference, stable learning, and an efficient denoising-based parameterization.</em></p>
+<h2 id="forward-process-in-diffusion-models">Forward Process in Diffusion Models<a hidden class="anchor" aria-hidden="true" href="#forward-process-in-diffusion-models">#</a></h2>
+<p>In diffusion models, the forward process is defined as a Markov process, where each state depends only on the previous one. At each step, a small amount of Gaussian noise is added:</p>
+<p>$$
+\begin{equation}
+q(x_t \mid x_{t-1}) = \mathcal{N}(\sqrt{1-\beta_t}, x_{t-1}, \beta_t I)
+\end{equation}
+$$</p>
+<p>Here, $\beta_t$ is the <strong>noise schedule</strong>, controlling how much noise is injected at each step.</p>
+<p>The scaling of the mean by $\sqrt{1-\beta_t}$ ensures that the total variance remains bounded across time. This is important both physically (to control the diffusion rate) and practically (to prevent exploding activations when training neural networks).</p>
+<p>Repeated application of Equation (4) allows us to derive a closed-form expression
+for the marginal distribution of $x_t$ conditioned on the original data $x_0$:,</p>
+<p>$$
+\begin{equation}</p>
+<p>x_t = \sqrt{\bar{\alpha}_t}, x_0 + \sqrt{1 - \bar{\alpha}_t}, \epsilon,
+\quad \epsilon \sim \mathcal{N}(0, I)</p>
+<p>\end{equation}
+$$</p>
+<p>where $\alpha = 1-\beta$ and $\bar{\alpha}<em>t = \prod\limits</em>{s=1}^{t}\alpha_s$</p>
+<p>Since the forward process is Markovian, the joint distribution over the entire trajectory factorizes as
+$$
+\begin{equation}
+q(x^{(0&hellip;T)}) = q(x^{(0)})\prod_{t=1}^{T} q(x^{(t)}|x^{t-1})
+\end{equation}
+$$</p>
+<p>After many steps, this forward process transforms structured data into nearly isotropic Gaussian noise, completing the connection between physical diffusion and generative modeling.</p>
+<hr>
+<p><em>With this forward process defined, the central challenge of diffusion models becomes clear: how do we reverse this irreversible-looking diffusion process to recover meaningful data?</em></p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="http://localhost:1313/Physics-in-Diffusion_models/">From Physical diffusion to Diffusion Models</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
