@@ -1,4 +1,4 @@
-baseURL = 'https://kanishk-18.github.io/Physics-in-Diffusion_models/'
+baseURL = 'in-Diffusion_models/'
 languageCode = 'en-us'
 title = 'From Physical diffusion to Diffusion Models'
 theme = 'PaperMod'

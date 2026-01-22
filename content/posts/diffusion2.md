@@ -148,14 +148,12 @@ Here, $\beta_t$ is the **noise schedule**, controlling how much noise is injecte
 The scaling of the mean by $\sqrt{1-\beta_t}$ ensures that the total variance remains bounded across time. This is important both physically (to control the diffusion rate) and practically (to prevent exploding activations when training neural networks).
 
 Repeated application of Equation (4) allows us to derive a closed-form expression
-for the marginal distribution of $x_t$ conditioned on the original data $x_0$:,
+for the marginal distribution of $x_t$ conditioned on the original data $x_0$:
 
 $$
 \begin{equation}
-
 x_t = \sqrt{\bar{\alpha}_t}\, x_0 + \sqrt{1 - \bar{\alpha}_t}\, \epsilon,
 \quad \epsilon \sim \mathcal{N}(0, I)
-
 \end{equation}
 $$
 
